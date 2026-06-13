@@ -16,8 +16,6 @@ async def zmones(ctx):
         roles = [role.name for role in member.roles if role.name != "@everyone"]
         roles_str = ", ".join(roles) if roles else "Nėra rolių"
         msg += f"**{member.display_name}** — {roles_str}\n"
-
-    # Discord žinutės limitas 2000 simbolių, jei serveris didelis - reikės skirstyti
     if len(msg) > 2000:
         for chunk in [msg[i:i+1990] for i in range(0, len(msg), 1990)]:
             await ctx.send(chunk)
