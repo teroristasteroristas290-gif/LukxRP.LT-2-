@@ -1,0 +1,29 @@
+Štai paprastas pavyzdys su discord.py (Python):
+pythonimport discord
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+@bot.command()
+async def zmones(ctx):
+    guild = ctx.guild
+    members = guild.members
+
+    msg = f"**Serveryje yra {len(members)} žmonių:**\n\n"
+    for member in members:
+        roles = [role.name for role in member.roles if role.name != "@everyone"]
+        roles_str = ", ".join(roles) if roles else "Nėra rolių"
+        msg += f"**{member.display_name}** — {roles_str}\n"
+
+    # Discord žinutės limitas 2000 simbolių, jei serveris didelis - reikės skirstyti
+    if len(msg) > 2000:
+        for chunk in [msg[i:i+1990] for i in range(0, len(msg), 1990)]:
+            await ctx.send(chunk)
+    else:
+        await ctx.send(msg)
+
+bot.run("TAVO_BOT_TOKEN")
